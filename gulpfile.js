@@ -2,7 +2,8 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     coffee = require('gulp-coffee'),
     concat = require('gulp-concat'),
-    browserify = require('gulp-browserify');
+    browserify = require('gulp-browserify'),
+    compass = require('gulp-compass');
 
 var coffeeSources = ['components/coffee/tagline.coffee', '']
 var jsSources = [ 
@@ -11,6 +12,7 @@ var jsSources = [
   'components/scripts/tagline.js',
   'components/scripts/template.js'
 ];
+var sassSources = ['components/sass/style.scss'];
 
 gulp.task('coffee', function() {
   gulp.src(coffeeSources)
@@ -26,4 +28,18 @@ gulp.task('js', function() {
     .pipe(browserify()
       .on('error', gutil.log))
     .pipe(gulp.dest('builds/development/js'))
+});
+
+gulp.task('compass', function() {
+  gulp.src(sassSources)
+    .pipe(compass({
+      sass: 'components/sass',
+      css: 'builds/development/css',
+      image: 'builds/development/images',
+      style: 'expanded'
+    })
+    .on('error', gutil.log))
+    //.pipe(gulp.dest('builds/development/css'))
+    // Absolutely not necessary - gulp-compass resolves it
+    // with the 'css: ...' parameter
 });
