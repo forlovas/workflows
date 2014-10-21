@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     compass = require('gulp-compass');
 
-var coffeeSources = ['components/coffee/tagline.coffee', '']
+var coffeeSources = ['components/coffee/tagline.coffee']
 var jsSources = [ 
   'components/scripts/rclick.js',
   'components/scripts/pixgrid.js',
@@ -42,6 +42,12 @@ gulp.task('compass', function() {
     //.pipe(gulp.dest('builds/development/css'))
     // Absolutely not necessary - gulp-compass resolves it
     // with the 'css: ...' parameter
+});
+
+gulp.task('watch', function() {
+  gulp.watch(coffeeSources, ['coffee']);
+  gulp.watch(jsSources, ['js']);
+  gulp.watch('components/sass/*.scss', ['compass']);
 });
 
 gulp.task('default', ['coffee', 'js', 'compass']);
