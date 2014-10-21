@@ -43,3 +43,5 @@ gulp.task('compass', function() {
     // Absolutely not necessary - gulp-compass resolves it
     // with the 'css: ...' parameter
 });
+
+gulp.task('default', ['coffee', 'js', 'compass']);
