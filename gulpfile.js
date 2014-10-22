@@ -4,7 +4,9 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     browserify = require('gulp-browserify'),
     compass = require('gulp-compass'),
-    connect = require('gulp-connect');
+    connect = require('gulp-connect')
+    gulpif = require('gulp-if')
+    uglify = require('gulp-uglify');
 
 var env,
     coffeeSources,
@@ -17,7 +19,7 @@ var env,
 
 env = process.env.NODE_ENV || 'development';
 
-if (env == 'development') {
+if (env === 'development') {
   outputDir = 'builds/development/';
   sassStyle = 'expanded';
 } else {
@@ -49,7 +51,10 @@ gulp.task('js', function() {
       .on('error', gutil.log))
     .pipe(browserify()
       .on('error', gutil.log))
-    .pipe(gulp.dest(outputDir + 'js'))
+    .pipe(gulpif(env === 'production', uglify())
+      .on('error', gutil.log))
+    .pipe(gulp.dest(outputDir + 'js')
+      .on('error', gutil.log))
     .pipe(connect.reload())
 });
 
