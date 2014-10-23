@@ -8,7 +8,11 @@ var gulp = require('gulp'),
     gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
     minifyHTML = require('gulp-minify-html'),
-    jsonminify = require('gulp-jsonminify');
+    jsonminify = require('gulp-jsonminify'),
+    imagemin = require('gulp-imagemin');
+/*  Looks like pngcrush doesn't work anymore with imagemin
+    imagemin = require('gulp-imagemin'),
+    pngcrush = require('imagemin-pngcrush');*/
 
 var env,
     coffeeSources,
@@ -81,6 +85,7 @@ gulp.task('watch', function() {
   gulp.watch('components/sass/*.scss', ['compass']);
   gulp.watch('builds/development/*.html', ['html']);
   gulp.watch('builds/development/js/*.json', ['json']);
+  gulp.watch('builds/development/images/**/*.*', ['images']);
 });
 
 gulp.task('html', function() {
@@ -97,6 +102,31 @@ gulp.task('json', function() {
     .pipe(connect.reload())
 });
 
+gulp.task('images', function() {
+  gulp.src('builds/development/images/**/*.*')
+    .pipe(gulpif(env === 'production', imagemin({
+      interlaced: true,
+      progressive: true,
+      optimizationLevel: 3
+    }))
+      .on('error', gutil.log))
+    .pipe(gulpif(env === 'production', gulp.dest(outputDir + 'images')))
+    .pipe(connect.reload())
+});
+
+// gulp.task('images', function() {
+//  gulp.src('builds/development/images/**/*.*')
+/*    .pipe(gulpif(env === 'production', imagemin({
+       progressive: true,
+       svgoPlugins: [{ removeViewBox: false }] /*,
+       This plugin directive is no longer available in the documentation
+       use: [pngcrush()] */
+/*     }))
+     .on('error', gutil.log))
+    .pipe(gulpif(env === 'production', gulp.dest(outputDir + 'images')))
+    .pipe(connect.reload())
+}); */
+
 gulp.task('connect', function() {
   connect.server({
     root: outputDir,
@@ -104,4 +134,4 @@ gulp.task('connect', function() {
   });
 });
 
-gulp.task('default', ['coffee', 'js', 'compass', 'html', 'json', 'connect', 'watch']);
+gulp.task('default', ['html', 'json', 'coffee', 'js', 'compass', 'images', 'connect', 'watch']);

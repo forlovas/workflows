@@ -15,10 +15,12 @@
     "gulp-concat": "^2.4.1",
     "gulp-connect": "^2.0.6",
     "gulp-if": "^1.2.5",
+    "gulp-imagemin": "^1.2.1",
     "gulp-jsonminify": "0.0.2",
     "gulp-minify-html": "^0.1.6",
     "gulp-uglify": "^1.0.1",
     "gulp-util": "^3.0.1",
+    "imagemin-pngcrush": "^3.1.0",
     "jquery": "^2.1.1",
     "mustache": "^0.8.2"
   }
